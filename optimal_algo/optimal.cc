@@ -126,3 +126,97 @@ public:
         return sum;
     }
 };
+
+// LCR 179. 查找总价格为目标值的两个商品
+class Solution 
+{
+public:
+    vector<int> twoSum(vector<int>& price, int target) 
+    {
+        int len = price.size();
+        for (int left = 0, right = len - 1; left < right; )
+        {
+            if (price[left] + price[right] > target)
+                --right;
+            else if (price[left] + price[right] < target)
+                ++left;
+            else
+                return {price[left], price[right]};
+        }
+        return vector<int>(2);
+    }
+};
+
+// 15. 三数之和
+class Solution 
+{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) 
+    {
+        vector<vector<int>> threeNum;
+        sort(nums.begin(), nums.end());
+        int len = nums.size();
+        for (int i = len - 1; i >= 2; )
+        {
+            if (nums[i] < 0)
+                break;
+            int target = -nums[i];
+            for (int left = 0, right = i - 1; left < right; )
+            {
+                int sum = nums[left] + nums[right];
+                if (sum > target)
+                    --right;
+                else if (sum < target)
+                    ++left;
+                else
+                {
+                    threeNum.push_back({nums[left++], nums[right--], nums[i]});
+                    while (left < right && nums[left] == nums[left - 1]) ++left;
+                    while (left < right && nums[right] == nums[right + 1]) --right;
+                }
+            }
+            --i;
+            while (i >= 2 && nums[i] == nums[i + 1]) --i; 
+        }
+        return threeNum;
+    }
+};
+
+// 18. 四数之和
+class Solution 
+{
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) 
+    {
+        int len = nums.size();
+        vector<vector<int>> fourNum;
+        sort(nums.begin(), nums.end());
+        for (int i = len - 1; i >= 3; )
+        {
+            for (int j = i - 1; j >= 2; )
+            {
+                long long ret = (long long)target - nums[i] - nums[j];
+                for (int left = 0, right = j - 1; left < right; )
+                {
+                    long long sum = nums[left] + nums[right];
+                    if (sum > ret)
+                        --right;
+                    else if (sum < ret)
+                        ++left;
+                    else
+                    {
+                        fourNum.push_back({nums[left++], nums[right--], nums[j], nums[i]});
+                        while (left < right && nums[left] == nums[left - 1])    ++left;
+                        while (left < right && nums[right] == nums[right + 1])    --right;
+                        cout <<  "i: " << i << ", j: " << j << ", left: " << left << ", right: " << right << endl;
+                    }
+                }
+                --j;
+                while (j >= 2 && nums[j] == nums[j + 1])    --j;
+            }
+            --i;
+            while (i >= 3 && nums[i] == nums[i + 1])    --i;
+        }
+        return fourNum;
+    }
+};
