@@ -220,3 +220,67 @@ public:
         return fourNum;
     }
 };
+
+// 209. 长度最小的子数组
+class Solution 
+{
+public:
+    int minSubArrayLen(int target, vector<int>& nums) 
+    {
+        
+        int len = nums.size(), minLen = INT_MAX, sum = 0;
+        for (int left = 0, right = 0; right < len; ++right)
+        {
+            sum += nums[right];
+            while (sum >= target)
+            {
+                minLen = min(right - left + 1, minLen);
+                sum -= nums[left++];
+            }
+        }
+        return (minLen == INT_MAX) ? 0 : minLen;
+    }
+};
+
+// 3. 无重复字符的最长子串
+class Solution 
+{
+public:
+    int lengthOfLongestSubstring(string s) 
+    {
+        if (s.empty())
+            return 0;
+        int arr[128] = {0};
+        int len = INT_MIN, n = s.size();
+        for (int left = 0, right = 0; right < n; ++right)
+        {
+            arr[s[right]]++;
+            while (arr[s[right]] > 1)
+                arr[s[left++]]--;
+            len = max(right - left + 1, len);
+        }
+        return len;
+    }
+};
+
+// 1004. 最大连续1的个数 III
+class Solution 
+{
+public:
+    int longestOnes(vector<int>& nums, int k) 
+    {
+        int n = nums.size(), ret = 0, maxLen = INT_MIN;
+        for (int left = 0, right = 0; right < n; ++right)
+        {
+            if (0 == nums[right])
+                ++ret;
+            while (ret > k)
+            {
+                if(0 == nums[left++])
+                    --ret;
+            }
+            maxLen = max(right - left + 1, maxLen);
+        }
+        return maxLen;
+    }
+};
