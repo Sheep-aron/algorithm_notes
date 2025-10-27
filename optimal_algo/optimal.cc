@@ -284,3 +284,79 @@ public:
         return maxLen;
     }
 };
+
+// 1658. 将 x 减到 0 的最小操作数
+class Solution 
+{
+public:
+    int minOperations(vector<int>& nums, int x) 
+    {
+        int n = nums.size(), sum = 0, maxLen = INT_MIN, target = 0;
+        for (int num : nums)
+            target += num;
+        target -= x;
+        cout << "target: " << target << endl;
+        if (0 > target)
+            return -1;
+        for (int left = 0, right = 0; right < n; ++right)
+        {
+            sum += nums[right];
+            while (sum > target)
+                sum -= nums[left++];
+            if (sum == target)
+                maxLen = max(right - left + 1, maxLen);
+        }
+        return (INT_MIN == maxLen) ? -1 : (n - maxLen);
+    }
+};
+
+// 904. 水果成篮
+class Solution 
+{
+public:
+    int totalFruit(vector<int>& fruits) 
+    {
+        int n = fruits.size(), maxLen = INT_MIN;
+        unordered_map<int, int> mp;
+        for (int left = 0, right = 0; right < n; ++right)
+        {
+            mp[fruits[right]]++;
+            while (mp.size() > 2)
+            {
+                if (--mp[fruits[left]] == 0)
+                    mp.erase(fruits[left]);
+                ++left;
+            }
+            maxLen = max(right - left + 1, maxLen);
+        }
+        return maxLen;
+    }
+};
+
+// 438. 找到字符串中所有字母异位词
+class Solution 
+{
+public:
+    vector<int> findAnagrams(string s, string p) 
+    {
+        vector<int> vi;
+        int sLen = s.size(), pLen = p.size(), hash1[26] = {0}, hash2[26] = {0};
+        for (char ch : p)
+            hash1[ch - 'a']++;
+        for (int left = 0, right = 0, count = 0; right < sLen; ++right)
+        {
+            char in = s[right];
+            if (++hash2[in - 'a'] <= hash1[in - 'a'])
+                ++count;
+            if (right - left + 1 > pLen)
+            {
+                char out = s[left++];
+                if (hash2[out - 'a']-- <= hash1[out - 'a'])
+                    --count;
+            }
+            if (count == pLen)
+                vi.push_back(left);
+        }
+        return vi;
+    }
+};
