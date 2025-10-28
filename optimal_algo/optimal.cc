@@ -360,3 +360,43 @@ public:
         return vi;
     }
 };
+
+// 30. 串联所有单词的子串
+class Solution 
+{
+public:
+    vector<int> findSubstring(string s, vector<string>& words) 
+    {
+        vector<int> subString;
+        int sLen = s.size(), wordsLen = words.size(), wordLen = words[0].size(), strLen = wordLen * wordsLen;
+        if (strLen > sLen)
+            return vector<int>();
+        unordered_map<string, int> hash1, hash2;
+        for (auto str : words)
+            hash1[str]++;
+        string str;
+        str.resize(strLen);
+        for (int i = 0; i < wordLen; ++i)
+        {
+            cout << i << endl;
+            for (int left = i, right = i, count = 0; right + wordLen <= sLen; right += wordLen)
+            {
+                string in = s.substr(right, wordLen);
+                if (hash1.count(in) && ++hash2[in] <= hash1[in])
+                    ++count;
+                if (right - left + 1 > strLen)
+                {
+                    string out = s.substr(left, wordLen);
+                    if (hash1.count(out) && hash2[out]-- <= hash1[out])
+                        --count;
+                    left += wordLen;
+                }
+                cout << "count: " << count << endl;
+                if (count == wordsLen)
+                    subString.push_back(left);
+            }
+            hash2.clear();
+        }
+        return subString;
+    }
+};
