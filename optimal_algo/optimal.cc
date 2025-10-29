@@ -400,3 +400,41 @@ public:
         return subString;
     }
 };
+
+// 76. 最小覆盖子串
+class Solution 
+{
+public:
+    string minWindow(string s, string t) 
+    {
+        int hash1[128] = { 0 }, hash2[128] = { 0 };
+        int minLen = INT_MAX, kinds = 0, sLen = s.size(), begin = -1;
+        for (auto ch : t)
+        {
+            if (0 == hash1[ch]++)
+                ++kinds;
+        }
+        for (int left = 0, right = 0, count = 0; right < sLen; ++right)
+        {
+            char in = s[right];
+            if (++hash2[in] == hash1[in])
+                ++count;
+            while (count == kinds)
+            {
+                if (right - left + 1 < minLen)
+                {
+                    minLen = right - left + 1;
+                    begin = left;
+                }
+                char out = s[left++];
+                if (hash2[out]-- == hash1[out])
+                    --count;
+            }
+            
+        }
+        if (-1 == begin)
+            return "";
+        else
+            return s.substr(begin, minLen);
+    }
+};
