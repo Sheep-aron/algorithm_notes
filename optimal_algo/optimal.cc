@@ -438,3 +438,77 @@ public:
             return s.substr(begin, minLen);
     }
 };
+
+// 704. 二分查找
+class Solution 
+{
+public:
+    int search(vector<int>& nums, int target) 
+    {
+        int numsLen = nums.size();
+        for (int left = 0, right = numsLen - 1; left <= right; )
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > target)
+                right = mid - 1;
+            else if (nums[mid] < target)
+                left = mid + 1;
+            else
+                return mid;
+        }
+        return -1;
+    }
+};
+
+// 34. 在排序数组中查找元素的第一个和最后一个位置
+class Solution 
+{
+public:
+    vector<int> searchRange(vector<int>& nums, int target) 
+    {
+        if (0 == nums.size())
+            return {-1, -1};
+        int numsLen = nums.size(), left = 0, right = numsLen - 1, begin = 0;
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else
+                right = mid;
+        }
+        if (nums[left] != target)
+            return {-1, -1};
+        else
+            begin = left;
+        left = 0, right = numsLen - 1;
+        while (left < right)
+        {
+            int mid = left + (right - left + 1) / 2;
+            if (nums[mid] <= target)
+                left = mid;
+            else    
+                right = mid - 1;
+        }
+        return {begin, right};
+    }
+};
+
+// 35. 搜索插入位置
+class Solution 
+{
+public:
+    int searchInsert(vector<int>& nums, int target) 
+    {
+        int numsLen = nums.size(), left = 0, right = numsLen - 1;
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else    
+                right = mid;
+        }
+        return (nums[left] < target) ? right + 1 : right;
+    }
+};
